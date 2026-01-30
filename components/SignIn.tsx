@@ -1,12 +1,15 @@
-import { User } from 'lucide-react'
-import React from 'react'
+import { SignInButton } from "@clerk/nextjs";
+import { User } from "lucide-react";
+import React from "react";
 
 const SignIn = () => {
   return (
-    <div>
-      <User className="w-5 h-5 hover:text-accent-pink hoverEffect hover:cursor-pointer"/>
-    </div>
-  )
-}
+    <SignInButton>
+      <button>
+        <User className="w-5 h-5 hover:text-accent-pink hoverEffect hover:cursor-pointer" />
+      </button>
+    </SignInButton>
+  );
+};
 
-export default SignIn
+export default SignIn;

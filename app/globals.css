@@ -4,12 +4,14 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
+  --font-poppins: "Poppins", sans-serif;
   --color-soft-pink: #fcecec;
   --color-accent-pink: #fc6c85;
   --color-black-text: #1a1a1a;
   --color-grey-lines: #c3c3c3;
   --color-dark-pink: #db5079;
   --color-gold: #FFD700;
+  --color-darkColor: #151515;
 }
 
 @theme inline {
@@ -54,6 +56,7 @@
 }
 
 :root {
+  --font-poppins: "Poppins", sans-serif;
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -136,3 +139,15 @@
     @apply hover:cursor-pointer;
   }
 }
+body {
+  font-family: var(--font-poppins);
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+html,
+body {
+  @apply h-full;
+}
+

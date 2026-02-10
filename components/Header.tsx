@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import Container from "@/components/Container";
 import Logo from "./Logo";
@@ -7,11 +9,9 @@ import CartIcon from "./CartIcon";
 import FavoriteButton from "./FavoriteButton";
 import SignIn from "./SignIn";
 import MobileMenu from "./MobileMenu";
-import { currentUser } from "@clerk/nextjs/server";
-import { ClerkLoaded, SignedIn, UserButton } from "@clerk/nextjs";
+import { ClerkLoaded, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
-const Header = async () => {
-  const user = await currentUser();
+const Header = () => {
   return (
     <header className="bg-white py-5">
       <Container className="flex items-center justify-between text-black">
@@ -28,7 +28,9 @@ const Header = async () => {
             <SignedIn>
               <UserButton />
             </SignedIn>
-            {!user && <SignIn />}
+            <SignedOut>
+              <SignIn />
+            </SignedOut>
           </ClerkLoaded>
         </div>
         {/* NavAdmin */}

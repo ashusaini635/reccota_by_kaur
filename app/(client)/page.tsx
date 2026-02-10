@@ -5,7 +5,7 @@ import HomeBanner from "@/components/HomeBanner";
 
 const Home = () => {
   return (
-    <Container className="p-10">
+    <Container>
       <HomeBanner/>
     </Container>
   );

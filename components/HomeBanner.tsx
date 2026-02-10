@@ -14,7 +14,7 @@ const HomeBanner = () => {
           for Every Girl
         </Title>
         <p className="text-black opacity-90">
-          Discover our collection of premium handmade clothing designed with
+          Discover our collection of premium handmade <br />clothing designed with
           love and care for your little princess.
         </p>
         <Link href="/collections">
@@ -26,7 +26,7 @@ const HomeBanner = () => {
           </Button>
         </Link>
       </div>
-      <div className="w-96 h-70 overflow-hidden">
+      <div className="w-96 h-80 overflow-hidden">
         <Image
           src={banner_1}
           alt="banner_1"

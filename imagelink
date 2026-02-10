@@ -1,0 +1,49 @@
+const featuredProducts = [
+    {
+      id: "1",
+      name: "Rosewood Flutter Dress",
+      price: 45.99,
+      image: "https://images.unsplash.com/photo-1613424935149-c8efd5c41e91?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxnaXJsJTIwcGluayUyMGRyZXNzJTIwZmFzaGlvbnxlbnwxfHx8fDE3NjM2MzU2OTV8MA&ixlib=rb-4.1.0&q=80&w=1080"
+    },
+    {
+      id: "2",
+      name: "Summer Breeze Top",
+      price: 32.99,
+      image: "https://images.unsplash.com/photo-1724490056260-44bf1de2617e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxnaXJsJTIwdG9wJTIwY2xvdGhpbmd8ZW58MXx8fHwxNzYzNjM1Njk3fDA&ixlib=rb-4.1.0&q=80&w=1080"
+    },
+    {
+      id: "3",
+      name: "Ethnic Grace Dress",
+      price: 54.99,
+      image: "https://images.unsplash.com/photo-1642391326202-8632400af62b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxnaXJsJTIwZXRobmljJTIwd2VhciUyMGRyZXNzfGVufDF8fHx8MTc2MzYzNTY5Nnww&ixlib=rb-4.1.0&q=80&w=1080"
+    },
+    {
+      id: "4",
+      name: "Party Princess Dress",
+      price: 62.99,
+      image: "https://images.unsplash.com/photo-1622079401116-8317808352d9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxnaXJsJTIwcGFydHklMjBkcmVzc3xlbnwxfHx8fDE3NjM2MzU2OTd8MA&ixlib=rb-4.1.0&q=80&w=1080"
+    }
+  ];
+
+  const collections = [
+    {
+      name: "Tops",
+      image: "https://images.unsplash.com/photo-1724490056260-44bf1de2617e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxnaXJsJTIwdG9wJTIwY2xvdGhpbmd8ZW58MXx8fHwxNzYzNjM1Njk3fDA&ixlib=rb-4.1.0&q=80&w=1080"
+    },
+    {
+      name: "Dresses",
+      image: "https://images.unsplash.com/photo-1495543950194-0d30125ba897?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxnaXJsJTIwc3VtbWVyJTIwZHJlc3N8ZW58MXx8fHwxNzYzNjM1Njk3fDA&ixlib=rb-4.1.0&q=80&w=1080"
+    },
+    {
+      name: "Ethnic Wear",
+      image: "https://images.unsplash.com/photo-1642391326202-8632400af62b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxnaXJsJTIwZXRobmljJTIwd2VhciUyMGRyZXNzfGVufDF8fHx8MTc2MzYzNTY5Nnww&ixlib=rb-4.1.0&q=80&w=1080"
+    }
+  ];
+
+
+cont banner = [
+{
+name: "Hero Banner",
+image:"https://images.unsplash.com/photo-1759313560222-b73784cd42f6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjaGlsZHJlbiUyMGZhc2hpb24lMjBzdHVkaW98ZW58MXx8fHwxNzYzNjM1Njk4fDA&ixlib=rb-4.1.0&q=80&w=1080"
+}
+]

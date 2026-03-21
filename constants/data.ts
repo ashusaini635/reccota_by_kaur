@@ -15,13 +15,18 @@ export const quickLinkdata = [
 ];
 export const categoriesData = [
   { title: "New Arrivals", href: "new-arrivals" },
-  { title: "Tops", href: "tops" },
-  { title: "Bottoms", href: "bottoms" },
-  { title: "Dresses", href: "dresses" },
-  { title: "Jackets & Outerwear", href: "jackets-outerwear" },
-  { title: "Activewear", href: "activewear" },
-  { title: "Swimwear", href: "swimwear" },
-  { title: "Intimates & Sleepwear", href: "intimates-sleepwear" },
-  { title: "Plus Size", href: "plus-size" },
-  { title: "Accessories", href: "accessories" },
+  { title: "Saree", href: "saree" },
+  { title: "Suit", href: "suit" },
+  { title: "Coord Set", href: "coord-set" },
+  { title: "Lehenga", href: "lehenga" },
+  { title: "Kurti", href: "kurti" },
+  { title: "Dupatta", href: "dupatta" },
+];
+export const productTypeData = [
+  { title: "Saree", value: "saree" },
+  { title: "Suit", value: "suit" },
+  { title: "Coord Set", value: "coord-set" },
+  { title: "Lehenga", value: "lehenga" },
+  { title: "Kurti", value: "kurti" },
+  { title: "Dupatta", value: "dupatta" },
 ];

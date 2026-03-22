@@ -13,6 +13,9 @@
   --color-gold: #FFD700;
   --color-darkColor: #151515;
   --color-dark_blue: #6c7fd8;
+  --color-light-text: #686e7d;
+  --color-discount: #064e3b;
+  --color-stock: #22c55e;
 }
 
 @theme inline {

@@ -12,79 +12,97 @@ import AddToCartButton from "./AddToCartButton";
 const ProductCard = ({ product }: { product: Product }) => {
   const statusMap = {
     sale: (
-      <p
-        className="absolute top-2 left-2 z-10 text-xs border border-darkColor/50 
-      px-2 rounded-full group-hover:border-accent-pink group-hover:text-accent-pink hoverEffect"
-      >
-        Sale!
-      </p>
+      <span className="text-dark-pink uppercase tracking-widest font-bold text-[10px]">
+        Sale
+      </span>
     ),
     new: (
-      <p
-        className="absolute top-2 left-2 z-10 text-xs border border-darkColor/50 
-      px-2 rounded-full group-hover:border-accent-pink group-hover:text-accent-pink hoverEffect"
-      >
+      <span className="text-accent-pink uppercase tracking-widest font-bold text-[10px]">
         New Arrival
-      </p>
+      </span>
     ),
     hot: (
-      <Link href="/deal">
+      <Link href="/deal" className="text-orange-500 uppercase tracking-widest font-bold text-[10px] flex items-center gap-1 hover:scale-105 transition-transform">
         <FlameIcon
-          size={20}
-          fill="#fb6c08"
-          className="absolute top-2 left-2 z-10 border border-orange-400/50 px-1 rounded-full group-hover:border-orange-400 hover:text-accent-pink hoverEffect"
+          size={12}
+          strokeWidth={2.5}
         />
+        Hot
       </Link>
     ),
   };
 
   return (
-    <div className="text-sm border border-soft-pink rounded-tr-[40px] rounded-bl-[40px] rounded-tl-xl rounded-br-xl shadow-xl bg-white group overflow-hidden hover:border-accent-pink/50 transition-all duration-300 cursor-pointer hover:-translate-y-2 hoverEffect">
-      <div className="relative group overflow-hidden bg-soft-pink/30">
+    <div className="group flex flex-col bg-transparent cursor-pointer">
+      {/* Image Section - Fashion Arch Style */}
+      <div className="relative w-full aspect-4/5 overflow-hidden rounded-t-[3rem] rounded-b-2xl border border-accent-pink/20 bg-soft-pink/20 group-hover:border-accent-pink/40 group-hover:shadow-2xl group-hover:shadow-accent-pink/10 transition-all duration-500">
         {product?.images && (
           <Image
             src={urlFor(product?.images[0]).url()}
-            alt="ProductImage"
+            alt={product?.name || "Product Image"}
             loading="lazy"
             width={700}
             height={700}
-            className={`w-full h-64 object-contain overflow-hidden transition-transform bg-white duration-500 ${product?.stock !== 0 ? "group-hover:scale-105" : "opatcity-50"}`}
+            className={`w-full h-full object-cover transition-transform duration-700 ${product?.stock !== 0 ? "group-hover:scale-105" : "opacity-50"}`}
           />
         )}
-        <AddToWishlistButton product={product} />
-        {product?.status && statusMap[product.status]}
+        <AddToWishlistButton product={product} className="absolute top-3 right-3 z-10 shadow-sm rounded-full" />
       </div>
-      <div className="p-3 flex flex-col gap-1.5">
-        {product?.categories && (
-          <p className="uppercase line-clamp-1 text-xs text-gray-400">
-            {product.categories.map((category) => category).join(", ")}
-          </p>
-        )}
-        <Title className="text-sm line-clamp-1">{product?.name}</Title>
-        <div className="flex items-center gap-2">
-          <div className="flex items-center gap-0.5">
-            {[...Array(5)].map((_, index) => (
-              <StarIcon
-                size={12}
-                key={index}
-                className={index < 4 ? "text-accent-pink" : "text-gray-300"}
-                fill={index < 4 ? "#fc6c85" : "lab(85.1236% -.612259 -3.7138)"}
-              />
-            ))}
+
+      {/* Content Section - Editorial Centered Layout */}
+      <div className="pt-5 flex flex-col items-center text-center gap-3 grow">
+        <div className="flex flex-col items-center gap-1.5 w-full">
+          {/* Status and Category Overline */}
+          <div className="flex flex-wrap items-center justify-center gap-2 mb-1">
+            {product?.status && statusMap[product.status]}
+            
+            {product?.status && product?.categories && (
+              <span className="w-1 h-1 rounded-full bg-gray-300 inline-block" />
+            )}
+            
+            {product?.categories && (
+              <p className="uppercase tracking-widest text-[10px] text-gray-500 font-semibold">
+                {product.categories.map((category) => category).join(", ")}
+              </p>
+            )}
           </div>
-          <p className="text-gray-400 text-xs tracking-wide">5 Review</p>
+
+          {/* Title */}
+          <Title className="text-base font-semibold text-darkColor line-clamp-1 group-hover:text-accent-pink transition-colors duration-300">
+            {product?.name}
+          </Title>
+
+          {/* Reviews & Stock */}
+          <div className="flex items-center gap-1 mt-1">
+            <div className="flex items-center gap-0.5">
+              {[...Array(5)].map((_, index) => (
+                <StarIcon
+                  size={12}
+                  key={index}
+                  className={index < 4 ? "text-accent-pink" : "text-gray-200"}
+                  fill={index < 4 ? "currentColor" : "none"}
+                />
+              ))}
+            </div>
+            <span className="w-1 h-1 rounded-full bg-gray-300 mx-1" />
+            <p className={`text-xs font-medium ${product?.stock === 0 ? "text-red-500" : "text-green-600"}`}>
+              {(product?.stock as number) > 0 ? "In Stock" : "Out of Stock"}
+            </p>
+          </div>
         </div>
-        <div className="flex items-center gap-2.5">
-          <p className="font-medium">In Stock</p>
-          <p className={`${product?.stock === 0 ? "text-red-600": "text-stock font-semibold"}`}>
-            {(product?.stock as number) > 0 ? product.stock : "Out of Stock"}
-          </p>
+
+        {/* Bottom Actions - Price & Cart */}
+        <div className="flex flex-col items-center gap-4 w-full mt-auto">
+          <PriceView 
+            price={product?.price}
+            discount={product?.discount}
+            className="text-lg"
+          />
+          <AddToCartButton 
+            product={product} 
+            className="w-full rounded-full bg-transparent text-darkColor border border-darkColor/30 hover:bg-dark-pink hover:border-dark-pink hover:text-white transition-all duration-300 py-3 font-semibold tracking-wide"
+          />
         </div>
-        <PriceView 
-          price={product?.price}
-          discount={product?.discount}
-          className="text-sm"/>
-          <AddToCartButton product={product} className="w-34 rounded-full"/>
       </div>
     </div>
   );

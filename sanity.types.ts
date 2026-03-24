@@ -244,6 +244,7 @@ export type Category = {
   title?: string;
   slug?: Slug;
   description?: string;
+  productCount?: number;
   image?: {
     asset?: SanityImageAssetReference;
     media?: unknown;

@@ -5,7 +5,6 @@ import HomeTabBar from "./HomeTabBar";
 import { productTypeData } from "@/constants/data";
 import { client } from "@/sanity/lib/client";
 import { AnimatePresence, motion } from "motion/react";
-import { Loader, Loader2, LoaderPinwheel } from "lucide-react";
 import NoProductAvailable from "./NoProductAvailabe";
 import ProductCard from "./ProductCard";
 import { Product } from "@/sanity.types";
@@ -36,21 +35,31 @@ const ProductGrid = () => {
     fetchData();
   }, [selectedTab]);
   return (
-    <div>
+    <div className="py-10">
       <HomeTabBar selectedTab={selectedTab} onTabSelected={setSelectedTab} />
       {loading ? (
-        <div className="flex flex-col items-center justify-center py-10 min-h-80 gap-4 bg-gray-100 w-full mt-10">
-          <div className="space-x-2 flex items-center text-blue-600">
-            <Loader2 className="w-5 h-5 animate-spin" />
-            <span>Product is Loading...</span>
-          </div>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8 mt-10">
+          {[...Array(4)].map((_, index) => (
+            <div key={index} className="flex flex-col bg-transparent animate-pulse">
+              <div className="w-full aspect-4/5 bg-soft-pink/40 rounded-t-[3rem] rounded-b-2xl mb-5" />
+              <div className="w-2/3 h-4 bg-soft-pink/50 rounded-full mx-auto mb-3" />
+              <div className="w-1/2 h-3 bg-soft-pink/50 rounded-full mx-auto mb-4" />
+              <div className="w-full h-12 bg-soft-pink/30 rounded-full mt-auto" />
+            </div>
+          ))}
         </div>
       ) : products?.length ? (
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2.5 mt-10">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8 mt-10">
         {products?.map((product)=>(
             <AnimatePresence key={product?._id}>
-                <motion.div layout initial={{opacity: 0.2}} animate={{opacity: 1}} exit={{opacity: 0}}>
-                <ProductCard product={product}/>
+                <motion.div 
+                  layout 
+                  initial={{ opacity: 0, y: 20 }} 
+                  animate={{ opacity: 1, y: 0 }} 
+                  exit={{ opacity: 0, scale: 0.95 }} 
+                  transition={{ duration: 0.5, ease: "easeOut" }}
+                >
+                  <ProductCard product={product}/>
                 </motion.div>
              </AnimatePresence>   
         ))}

@@ -8,21 +8,20 @@ import React from "react";
 const HeaderMenu = () => {
   const pathname = usePathname();
   return (
-    <div className="hidden md:inline-flex w-1/3 items-center gap-7 text-sm capitalize font-semibold">
+    <div className="hidden md:inline-flex w-1/3 items-center justify-center gap-8 text-xs md:text-sm uppercase tracking-widest font-semibold text-darkColor">
       {headerData?.map((item) => (
         <Link
           key={item?.title}
           href={item?.href}
-          className={`hover:text-accent-pink hoverEffect relative group ${
+          className={`hover:text-accent-pink transition-colors duration-300 relative group ${
             pathname === item?.href && "text-accent-pink"
           }`}
         >
           {item?.title}
           <span
-            className={`absolute -bottom-0.5 left-1/2 w-0 h-0.5 bg-accent-pink group-hover:w-1/2 hoverEffect group-hover:left-0 ${pathname === item?.href && "w-1/2"}`}
-          />
-          <span
-            className={`absolute -bottom-0.5 right-1/2 w-0 h-0.5 bg-accent-pink group-hover:w-1/2 hoverEffect group-hover:right-0 ${pathname === item?.href && "w-1/2"}`}
+            className={`absolute -bottom-1.5 left-0 w-full h-0.5 bg-accent-pink origin-center transform transition-transform duration-300 ease-out ${
+              pathname === item?.href ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+            }`}
           />
         </Link>
       ))}

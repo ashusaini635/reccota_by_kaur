@@ -1,6 +1,5 @@
 "use client";
 import { headerData } from "@/constants/data";
-import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
@@ -13,7 +12,7 @@ const HeaderMenu = () => {
         <Link
           key={item?.title}
           href={item?.href}
-          className={`hover:text-accent-pink transition-colors duration-300 relative group ${
+          className={`hover:text-accent-pink transition-colors duration-300 relative group whitespace-nowrap ${
             pathname === item?.href && "text-accent-pink"
           }`}
         >

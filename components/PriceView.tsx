@@ -13,16 +13,16 @@ const PriceView = ({price,discount,className}:Props) => {
     <div className={cn("flex items-center gap-2", className)}>
       <PriceFormatter 
         amount={price} 
-        className="text-lg font-bold text-darkColor tracking-wide" 
+        className="text-sm font-bold text-darkColor tracking-wide" 
       />
       {price && discount ? (
         <PriceFormatter 
           amount={price + (price * discount / 100)} 
-          className="text-sm font-medium text-gray-400 line-through decoration-gray-300 decoration-1" 
+          className="text-xs font-semibold text-gray-400 line-through decoration-gray-300 decoration-1" 
         />
       ) : null}
       {price && discount ? (
-        <span className="text-xs font-bold text-accent-pink tracking-wider bg-soft-pink/50 px-2 py-0.5 rounded-sm">
+        <span className="text-xs font-semibold text-accent-pink bg-soft-pink/50 px-2 py-0.5 rounded-sm">
           {discount}% OFF
         </span>
       ) : null}

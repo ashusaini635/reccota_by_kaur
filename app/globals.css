@@ -16,6 +16,7 @@
   --color-light-text: #686e7d;
   --color-discount: #064e3b;
   --color-stock: #22c55e;
+  --color-deal-bg: #f1f3f8;
 }
 
 @theme inline {

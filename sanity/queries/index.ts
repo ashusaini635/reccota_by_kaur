@@ -1,4 +1,5 @@
 import { sanityFetch } from "../lib/live";
+import { DEAL_PRODUCTS } from "./query";
 
 const getCategories = async (quantity?: number) => {
   try {
@@ -21,5 +22,14 @@ const getCategories = async (quantity?: number) => {
     return [];
   }
 };
+const getDealProducts = async () => {
+  try {
+    const { data } = await sanityFetch({ query: DEAL_PRODUCTS });
+    return data ?? [];
+  } catch (error) {
+    console.log("Error Fetching Deal Products: ", error);
+    return [];
+  }
+};
 
-export { getCategories };
+export { getCategories, getDealProducts };

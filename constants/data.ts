@@ -3,7 +3,7 @@ export const headerData = [
   { title: "Collections", href: "/collections" },
   { title: "About", href: "/about" },
   { title: "Contact", href: "/contact" },
-  { title: "Hot Deal", href: "/hot-deal" },
+  { title: "Hot Deal", href: "/deal" },
 ];
 export const quickLinkdata = [
   { title: "About us", href: "/about" },

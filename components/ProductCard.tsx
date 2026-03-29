@@ -37,14 +37,16 @@ const ProductCard = ({ product }: { product: Product }) => {
       {/* Image Section - Fashion Arch Style */}
       <div className="relative w-full aspect-4/5 overflow-hidden rounded-t-[3rem] rounded-b-2xl border border-accent-pink/20 bg-soft-pink/20 group-hover:border-accent-pink/40 group-hover:shadow-2xl group-hover:shadow-accent-pink/10 transition-all duration-500">
         {product?.images && (
-          <Image
-            src={urlFor(product?.images[0]).url()}
-            alt={product?.name || "Product Image"}
-            loading="lazy"
-            width={700}
-            height={700}
-            className={`w-full h-full object-cover transition-transform duration-700 ${product?.stock !== 0 ? "group-hover:scale-105" : "opacity-50"}`}
-          />
+          <Link href={`/product/${product?.slug?.current}`}>
+            <Image
+              src={urlFor(product?.images[0]).url()}
+              alt={product?.name || "Product Image"}
+              loading="lazy"
+              width={700}
+              height={700}
+              className={`w-full h-full object-cover transition-transform duration-700 ${product?.stock !== 0 ? "group-hover:scale-105" : "opacity-50"}`}
+            />
+          </Link>
         )}
         <AddToWishlistButton
           product={product}
@@ -59,7 +61,9 @@ const ProductCard = ({ product }: { product: Product }) => {
             {/* Category Overline */}
             {product?.categories && (
               <p className="uppercase tracking-widest text-[10px] text-accent-pink font-semibold truncate">
-                {product.categories.map((category: any) => category?.title || category).join(", ")}
+                {product.categories
+                  .map((category: any) => category?.title || category)
+                  .join(", ")}
               </p>
             )}
 
@@ -90,10 +94,10 @@ const ProductCard = ({ product }: { product: Product }) => {
               {(product?.stock as number) > 0 ? "In Stock" : "Out of Stock"}
             </p>
           </div>
-            <AddToCartButton
-              product={product}
-              className="w-full rounded-full bg-transparent text-darkColor border border-darkColor/30 hover:bg-dark-pink hover:border-dark-pink hover:text-white transition-all duration-300 py-2.5 text-xs font-semibold tracking-widest shadow-none"
-            />
+          <AddToCartButton
+            product={product}
+            className="w-full rounded-full bg-transparent text-darkColor border border-darkColor/30 hover:bg-dark-pink hover:border-dark-pink hover:text-white transition-all duration-300 py-2.5 text-xs font-semibold tracking-widest shadow-none"
+          />
         </div>
       </div>
     </div>

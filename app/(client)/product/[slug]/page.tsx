@@ -1,11 +1,15 @@
-import React from 'react'
+import { getProductBySlug } from "@/sanity/queries";
+import React from "react";
 
-const singleProductPage = () => {
-  return (
-    <div>
-      singleProductPage
-    </div>
-  )
-}
+const singleProductPage = async ({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) => {
+  const { slug } = await params;
+  const product = await getProductBySlug(slug);
 
-export default singleProductPage
+  return <div className="bg-red-600">singleProductPage</div>;
+};
+
+export default singleProductPage;

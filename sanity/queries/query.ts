@@ -5,5 +5,8 @@ const DEAL_PRODUCTS = defineQuery(
 ...,"categories":categories[]->title
 }`,
 );
+const PRODUCT_BY_SLUG = defineQuery(
+  `*[_type == 'product' && slug.current == $slug] | order(name asc)[0]`,
+);
 
-export { DEAL_PRODUCTS };
+export { DEAL_PRODUCTS, PRODUCT_BY_SLUG };

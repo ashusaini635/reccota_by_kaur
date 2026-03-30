@@ -5,7 +5,6 @@ import Link from "next/link";
 import React from "react";
 import { SearchX } from "lucide-react";
 import { motion } from "framer-motion";
-import "./globals.css"; // Fix for global CSS not working on root error pages
 
 const NotFoundPage = () => {
   return (

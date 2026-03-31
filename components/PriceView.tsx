@@ -1,6 +1,7 @@
 import React from 'react'
 import PriceFormatter from './PriceFormatter';
 import { cn } from "@/lib/utils";
+import { twMerge } from 'tailwind-merge';
 
 interface Props {
     price: number | undefined;
@@ -13,7 +14,7 @@ const PriceView = ({price,discount,className}:Props) => {
     <div className={cn("flex items-center gap-2", className)}>
       <PriceFormatter 
         amount={price} 
-        className="text-sm font-bold text-darkColor tracking-wide" 
+        className={twMerge("text-sm font-bold text-darkColor tracking-wide", className)}
       />
       {price && discount ? (
         <PriceFormatter 

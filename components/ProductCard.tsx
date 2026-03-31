@@ -71,6 +71,21 @@ const ProductCard = ({ product }: { product: Product }) => {
             <Title className="text-sm md:text-base font-serif italic font-medium text-darkColor line-clamp-1 group-hover:text-dark-pink transition-colors duration-300">
               {product?.name}
             </Title>
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1">
+                {[...Array(5)].map((_, index) => (
+                  <StarIcon
+                    key={index}
+                    size={12}
+                    className={
+                      index < 4 ? "text-accent-pink" : " text-gray-500"
+                    }
+                    fill={index < 4 ? "#fc6c85" : "#6a7282"}
+                  />
+                ))}
+              </div>
+              <p className="text-lightText text-xs tracking-wide">5 Reviews</p>
+            </div>
           </div>
 
           {/* Status Badge */}
@@ -85,11 +100,11 @@ const ProductCard = ({ product }: { product: Product }) => {
             <PriceView
               price={product?.price}
               discount={product?.discount}
-              className="text-base font-medium font-sans flex-wrap"
+              className="text-sm font-sans flex-wrap"
             />
             {/* Stock Status */}
             <p
-              className={`text-[10px] uppercase tracking-wider font-semibold ${product?.stock === 0 ? "text-red-500" : "text-green-600"}`}
+              className={`text-[10px] uppercase tracking-wider font-bold ${product?.stock === 0 ? "text-red-500" : "text-green-600"}`}
             >
               {(product?.stock as number) > 0 ? "In Stock" : "Out of Stock"}
             </p>

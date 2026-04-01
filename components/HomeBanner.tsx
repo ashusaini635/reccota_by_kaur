@@ -27,7 +27,7 @@ const HomeBanner = () => {
         </Title>
         <p className="text-gray-700 text-base md:text-lg leading-relaxed max-w-md mx-auto md:mx-0">
           Discover our exquisite collection of premium handmade clothing. 
-          Designed with love, tradition, and care for your little princess.
+          Designed with love, tradition, and care.
         </p>
         <div className="pt-2">
           <Link href="/collections">

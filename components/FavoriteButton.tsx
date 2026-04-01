@@ -15,10 +15,7 @@ const FavoriteButton = ({
       {!showProduct ? (
         <Link href={"/wishlist"} className="group relative">
           <Heart className="w-5 h-5 hover:text-accent-pink hoverEffect" />
-          <span
-            className="absolute -top-1 -right-1 bg-accent-pink
-           text-white h-3.5 w-3.5 text-xs rounded-full font-semibold flex items-center justify-center"
-          >
+          <span className="absolute -top-1 -right-1 bg-accent-pink text-white h-3.5 w-3.5 text-xs rounded-full font-semibold flex items-center justify-center">
             0
           </span>
         </Link>

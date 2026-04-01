@@ -470,11 +470,52 @@ export type PRODUCT_BY_SLUG_RESULT = {
   isFeatured?: boolean;
 } | null;
 
+// Source: sanity/queries/query.ts
+// Variable: BRAND_QUERY
+// Query: *[_type == 'product' && slug.current == $slug]{  'brandName': brand->title  }
+export type BRAND_QUERY_RESULT = Array<{
+  brandName: string | null;
+}>;
+
+// Source: sanity/queries/query.ts
+// Variable: BRANDS_QUERY
+// Query: *[_type=='brand'] | order(name asc)
+export type BRANDS_QUERY_RESULT = Array<{
+  _id: string;
+  _type: "brand";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  slug?: Slug;
+  description?: string;
+  logo?: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+  image?: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+  website?: string;
+  yearFounded?: number;
+  foundedBy?: string;
+  isFeatured?: boolean;
+}>;
+
 // Query TypeMap
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
     "*[_type == 'product' && status == 'hot'] | order(name asc){\n...,\"categories\":categories[]->title\n}": DEAL_PRODUCTS_RESULT;
     "*[_type == 'product' && slug.current == $slug] | order(name asc)[0]": PRODUCT_BY_SLUG_RESULT;
+    "*[_type == 'product' && slug.current == $slug]{\n  'brandName': brand->title\n  }": BRAND_QUERY_RESULT;
+    "*[_type=='brand'] | order(name asc) ": BRANDS_QUERY_RESULT;
   }
 }

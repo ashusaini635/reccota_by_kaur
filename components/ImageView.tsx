@@ -26,6 +26,9 @@ interface Props {
 
 const ImageView = ({ images = [], isStock }: Props) => {
   const [active, setActive] = React.useState(images[0]);
+  const [activeTab, setActiveTab] = React.useState<
+    "description" | "additional" | "review"
+  >("description");
 
   return (
     <div className="w-full md:w-1/2 space-y-2 md:space-y-4">
@@ -66,6 +69,98 @@ const ImageView = ({ images = [], isStock }: Props) => {
             />
           </button>
         ))}
+      </div>
+      <div className="flex bg-gray-300/20 rounded-md gap-2 p-1  h-10">
+        <button
+          onClick={() => setActiveTab("description")}
+          className={`w-full text-center text-sm font-medium hover:bg-accent-pink/90 hover:text-white hover:rounded-md hoverEffect ${
+            activeTab === "description"
+              ? "bg-accent-pink text-white rounded-md"
+              : "text-darkColor"
+          }`}
+        >
+          Description
+        </button>
+        <button
+          onClick={() => setActiveTab("additional")}
+          className={`w-full text-center text-sm font-medium hover:bg-accent-pink/90 hover:text-white hover:rounded-md hoverEffect ${
+            activeTab === "additional"
+              ? "bg-accent-pink text-white rounded-md"
+              : "text-darkColor"
+          }`}
+        >
+          Additional Information
+        </button>
+        <button
+          onClick={() => setActiveTab("review")}
+          className={`w-full text-center text-sm font-medium hover:bg-accent-pink/90 hover:text-white hover:rounded-md hoverEffect ${
+            activeTab === "review"
+              ? "bg-accent-pink text-white rounded-md"
+              : "text-darkColor"
+          }`}
+        >
+          Review
+        </button>
+      </div>
+
+      <div className="mt-4 p-4 border border-darkColor/10 rounded-md bg-white text-gray-600 text-sm leading-relaxed shadow-sm min-h-32">
+        <AnimatePresence mode="wait">
+          {activeTab === "description" && (
+            <motion.p
+              key="description"
+              initial={{ opacity: 0, y: 5 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -5 }}
+              transition={{ duration: 0.3 }}
+            >
+              Experience the finest craftsmanship with this product. It features
+              a stunning design tailored for elegance and comfort. (You can pass
+              the actual product description here as a prop to make it dynamic).
+            </motion.p>
+          )}
+          {activeTab === "additional" && (
+            <motion.div
+              key="additional"
+              initial={{ opacity: 0, y: 5 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -5 }}
+              transition={{ duration: 0.3 }}
+              className="space-y-1"
+            >
+              <p>
+                <strong>Material:</strong> 100% Premium Cotton
+              </p>
+              <p>
+                <strong>Care Instructions:</strong> Hand wash cold, do not
+                bleach.
+              </p>
+              <p>
+                <strong>Brand:</strong> Reecota By Kaur
+              </p>
+            </motion.div>
+          )}
+          {activeTab === "review" && (
+            <motion.div
+              key="review"
+              initial={{ opacity: 0, y: 5 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -5 }}
+              transition={{ duration: 0.3 }}
+              className="space-y-2"
+            >
+              <div>
+                <span className="text-accent-pink text-lg">⭐⭐⭐⭐⭐</span>
+                <p className="mt-1">
+                  "Absolutely love the quality and design. Perfect fit!" <br />
+                  <span className="text-xs text-gray-400">- Jane D.</span>
+                </p>
+              </div>
+              <p className="text-xs text-gray-400 italic pt-2">
+                More reviews coming soon...
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );

@@ -13,4 +13,6 @@ const BRAND_QUERY = defineQuery(`*[_type == 'product' && slug.current == $slug]{
   'brandName': brand->title
   }`);
 
-export { DEAL_PRODUCTS, PRODUCT_BY_SLUG, BRAND_QUERY };
+const BRANDS_QUERY = defineQuery(`*[_type=='brand'] | order(name asc) `);
+
+export { DEAL_PRODUCTS, PRODUCT_BY_SLUG, BRAND_QUERY, BRANDS_QUERY };

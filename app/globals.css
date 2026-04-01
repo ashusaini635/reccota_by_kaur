@@ -156,3 +156,6 @@ body {
   @apply h-full;
 }
 
+.scrollbar-hide::-webkit-scrollbar{
+  display: none;
+}

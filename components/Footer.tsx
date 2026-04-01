@@ -18,7 +18,7 @@ const Footer = () => {
             <Logo />
             <p className="text-gray-600 text-sm leading-relaxed max-w-sm">
               Handcrafted with love, each piece is designed to bring elegance
-              and comfort to your little girl&apos;s wardrobe. Premium quality,
+              and comfort to your wardrobe. Premium quality,
               timeless designs.
             </p>
             <SocialMedia

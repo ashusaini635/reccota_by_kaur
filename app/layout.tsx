@@ -7,11 +7,11 @@ const poppins = Poppins({
   fallback: ["ui-sans-serif", "system-ui", "sans-serif"],
 });
 
-const RootLayout=({children}:{children:React.ReactNode})=>{
-  return <html lang="en">
-    <body className={`${poppins.className} antialiased`}>
-      {children}
-    </body>
-  </html>
-}
+const RootLayout = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <html lang="en">
+      <body className={`${poppins.className} antialiased`}>{children}</body>
+    </html>
+  );
+};
 export default RootLayout;

@@ -10,6 +10,7 @@ import PriceView from "./PriceView";
 import AddToCartButton from "./AddToCartButton";
 
 const ProductCard = ({ product }: { product: Product }) => {
+  const isOutOfStock = product?.stock === 0;
   const statusMap = {
     sale: (
       <span className="inline-block border border-dark-pink text-dark-pink uppercase tracking-widest font-bold text-[9px] px-2 py-0.5 rounded-full">
@@ -95,8 +96,8 @@ const ProductCard = ({ product }: { product: Product }) => {
         </div>
 
         {/* Bottom Actions - Price & Cart */}
-        <div className="flex flex-col w-full mt-auto gap-3">
-          <div className="flex flex-wrap items-center justify-between w-full gap-2">
+        <div className="flex flex-col w-full mt-auto gap-0.5">
+          <div className="flex flex-col items-start w-full gap-1">
             <PriceView
               price={product?.price}
               discount={product?.discount}
@@ -104,9 +105,9 @@ const ProductCard = ({ product }: { product: Product }) => {
             />
             {/* Stock Status */}
             <p
-              className={`text-[10px] uppercase tracking-wider font-bold ${product?.stock === 0 ? "text-red-500" : "text-green-600"}`}
+              className={`text-[10px] uppercase tracking-wider font-bold pt-1 ${isOutOfStock ? "text-red-500" : "text-green-600"}`}
             >
-              {(product?.stock as number) > 0 ? "In Stock" : "Out of Stock"}
+              {isOutOfStock ? "Out of Stock" : "In Stock"}
             </p>
           </div>
           <AddToCartButton

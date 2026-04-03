@@ -11,10 +11,11 @@ const PriceFormatter = ({ amount, className }: Props) => {
   const formattedPrice = new Intl.NumberFormat("en-IN", {
     currency: "INR",
     style: "currency",
-    maximumFractionDigits: 0, // Clean fashion look with no decimals
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
   }).format(amount);
 
-  return <span className={cn("font-semibold", className)}>{formattedPrice}</span>;
+  return <span className={cn("font-semibold whitespace-nowrap", className)}>{formattedPrice}</span>;
 };
 
 export default PriceFormatter;

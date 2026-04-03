@@ -88,15 +88,17 @@ const SingleProductPage = async ({
         )}
 
         {/* Actions */}
-        <div className="flex items-center gap-4 pt-2">
-          <div className="flex-1">
-            <AddToCartButton 
-              product={product} 
-              className="w-full bg-darkColor text-white hover:bg-dark-pink hover:border-dark-pink py-3.5 md:py-4 rounded-full text-sm font-bold tracking-widest uppercase transition-all duration-300 hover:-translate-y-1 shadow-lg border border-transparent" 
-            />
+        {product && (
+          <div className="flex items-center gap-4 pt-2">
+            <div className="flex-1">
+              <AddToCartButton 
+                product={product} 
+                className="w-full bg-darkColor text-white hover:bg-dark-pink hover:border-dark-pink py-3.5 md:py-4 rounded-full text-sm font-bold tracking-widest uppercase transition-all duration-300 hover:-translate-y-1 shadow-lg border border-transparent" 
+              />
+            </div>
+            <FavoriteButton showProduct={true} product={product} />
           </div>
-          <FavoriteButton showProduct={true} product={product} />
-        </div>
+        )}
 
         <div className="pt-2">
           <ProductCharacteristics product={product} />

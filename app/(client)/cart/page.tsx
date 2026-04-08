@@ -3,14 +3,20 @@ import useStore from '@/collection'
 import Container from '@/components/Container'
 import EmptyCart from '@/components/EmptyCart'
 import NoAccessToCart from '@/components/NoAccessToCart'
+import PriceFormatter from '@/components/PriceFormatter'
+import ProductSideMenu from '@/components/ProductSideMenu'
+import QuantityButton from '@/components/QuantityButton'
+import { Button } from '@/components/ui/button'
 import { Title } from '@/components/ui/text'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { Address } from '@/sanity.types'
 import { urlFor } from '@/sanity/lib/image'
 import { useAuth, useUser } from '@clerk/nextjs'
-import { ShoppingBagIcon } from 'lucide-react'
+import { ShoppingBagIcon, Trash } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import React, { useState } from 'react'
+import toast from 'react-hot-toast'
 
 const CartPage = () => {
   const {
@@ -27,6 +33,15 @@ const CartPage = () => {
   const { user } = useUser()
   // const [addresses, setAddresses] = useState<ADDRESS_QUERYResult | null>(null);
   const [selectedAddress, setSelectedAddress] = useState<Address | null>(null);
+  const handleResetCart = () => {
+    const confrimed = window.confirm('Are you sure you want to reset the cart?')
+    if (confrimed) {
+      resetCart()
+      toast.dismiss()
+      toast.success('Cart reset successfully')
+    }
+  }
+
 
   return (
     <div className='bg-gray-50 pb-52 md:pb-10'>
@@ -56,10 +71,47 @@ const CartPage = () => {
                           <p className='text-sm capitalize text-gray-500'>Size: <span className='font-medium text-black'>{product?.sizes?.map((size) => size).join(', ') || 'N/A'}</span></p>
                           <p className='text-sm capitalize text-gray-500'>Status: <span className='font-medium text-black'>{product?.status}</span></p>
                         </div>
+                        <div className='flex items-center gap-2'>
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger>
+                                <ProductSideMenu product={product} className='relative top-0 right-0' />
+                              </TooltipTrigger>
+                              <TooltipContent className='font-bold'>
+                                Add to Wishlist
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger>
+                                <Trash onClick={() => {
+                                  deleteCartProduct(product?._id)
+                                  toast.dismiss()
+                                  toast.success('Product removed from cart')
+                                }
+                                }
+                                  className='w-4 md:w-5 mr-1 text-gray-500 hover:text-red-600
+                                hoverEffect'/>
+                              </TooltipTrigger>
+                              <TooltipContent className='font-bold'>
+                                Remove from Cart
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                        </div>
                       </div>
                     </div>
-                  </div>)
+                    <div className='flex flex-col items-start justify-between h-36 md:h-44 p-0.5 md:p-1'>
+                      <PriceFormatter amount={(product?.price as number) * itemCount} className='text-md' />
+                      <QuantityButton product={product} />
+                    </div>
+                  </div>
+                )
               })}
+              <Button onClick={() => {
+                handleResetCart()
+              }} className='m-5 font-semibold' variant="destructive">Reset Cart</Button>
             </div>
           </div>
           <div>Summary</div>

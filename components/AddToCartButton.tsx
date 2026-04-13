@@ -15,11 +15,21 @@ interface Props {
 }
 
 const AddToCartButton = ({ product, className }: Props) => {
-  const { addItem, getItemCount } = useStore();
-  const itemCount = getItemCount(product?._id)
-  const isOutOfStock = product?.stock === 0;
+  const { addItem, getItemCount, getProductCount } = useStore();
+  
+  const p = product as any;
+  const hasVariants = p?.variants?.length > 0;
+  const selectedVariant = p?.variants?.find(
+    (v: any) => (v.size || null) === (p.selectedSize || null) && (v.color || null) === (p.selectedColor || null)
+  );
+  const availableStock = hasVariants ? (selectedVariant?.stock || 0) : (p?.stock || 0);
+
+  const itemCount = getItemCount(product?._id, p?.selectedSize, p?.selectedColor);
+  const cartQuantity = hasVariants ? itemCount : getProductCount(product?._id);
+  const isOutOfStock = availableStock === 0 || availableStock <= cartQuantity;
+
   const handleAddToCart = () => {
-    if ((product.stock as number) > itemCount) {
+    if (availableStock > cartQuantity) {
       addItem(product)
       toast.dismiss();
       toast.success(`${product?.name?.substring(0, 12)}... added Successfully`)

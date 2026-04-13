@@ -56,6 +56,7 @@ export const productType = defineType({
       name: "stock",
       title: "Stock",
       type: "number",
+      description: "Overall total stock (For variant-level stock, use the Variants field below)",
       validation: (Rule) => Rule.min(0),
     }),
     defineField({
@@ -116,6 +117,44 @@ export const productType = defineType({
       type: "array",
       of: [{ type: "string" }],
       description: "List all available colors for this product",
+    }),
+    defineField({
+      name: "variants",
+      title: "Product Variants (Inventory Tracking)",
+      type: "array",
+      description: "Add specific size and color combinations and track their stock individually.",
+      of: [
+        {
+          type: "object",
+          fields: [
+            defineField({
+              name: "size",
+              title: "Size",
+              type: "string",
+            }),
+            defineField({
+              name: "color",
+              title: "Color",
+              type: "string",
+            }),
+            defineField({
+              name: "stock",
+              title: "Variant Stock",
+              type: "number",
+              validation: (Rule) => Rule.required().min(0),
+            }),
+          ],
+          preview: {
+            select: { size: "size", color: "color", stock: "stock" },
+            prepare({ size, color, stock }) {
+              return {
+                title: `${color || 'Any Color'} - ${size || 'Any Size'}`,
+                subtitle: `Stock: ${stock ?? 0}`,
+              };
+            },
+          },
+        },
+      ],
     }),
     defineField({
       name: "material",

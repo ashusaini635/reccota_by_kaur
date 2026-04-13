@@ -1,10 +1,8 @@
-import AddToCartButton from "@/components/AddToCartButton";
 import Container from "@/components/Container";
-import FavoriteButton from "@/components/FavoriteButton";
 import ImageView from "@/components/ImageView";
 import PriceView from "@/components/PriceView";
+import AddToCartArea from "@/components/AddToCartArea";
 import ProductCharacteristics from "@/components/ProductCharacteristics";
-import SizeSelector from "@/components/SizeSelector";
 import { getProductBySlug } from "@/sanity/queries";
 import { CornerDownLeft, StarIcon, Truck } from "lucide-react";
 import React from "react";
@@ -59,46 +57,17 @@ const SingleProductPage = async ({
           </p>
         </div>
 
-        {/* Price and Stock */}
-        <div className="flex items-center justify-between border-y border-accent-pink/10 py-5">
+        {/* Price */}
+        <div className="border-y border-accent-pink/10 py-5">
           <PriceView
             price={product?.price}
             discount={product?.discount}
             className="text-sm md:text-lg font-bold"
           />
-          <p
-            className={`px-4 py-1.5 text-xs uppercase tracking-widest font-bold rounded-full ${
-              product?.stock === 0
-                ? "bg-red-50 text-red-500 border border-red-200"
-                : "bg-green-50 text-green-700 border border-green-200"
-            }`}
-          >
-            {(product?.stock as number) > 0 ? "In Stock" : "Out of Stock"}
-          </p>
         </div>
 
-        {/* Size Selection */}
-        {product?.sizes && product.sizes.length > 0 && (
-          <div className="space-y-3 pt-2">
-            <p className="text-xs font-bold text-accent-pink uppercase tracking-widest">
-              Select Size
-            </p>
-            <SizeSelector sizes={product.sizes} />
-          </div>
-        )}
-
-        {/* Actions */}
-        {product && (
-          <div className="flex items-center gap-4 pt-2">
-            <div className="flex-1">
-              <AddToCartButton 
-                product={product} 
-                className="w-full bg-darkColor text-white hover:bg-dark-pink hover:border-dark-pink py-3.5 md:py-4 rounded-full text-sm font-bold tracking-widest uppercase transition-all duration-300 hover:-translate-y-1 shadow-lg border border-transparent" 
-              />
-            </div>
-            <FavoriteButton showProduct={true} product={product} />
-          </div>
-        )}
+        {/* Interactive Add To Cart Area (Size, Color, Actions) */}
+        {product && <AddToCartArea product={product} />}
 
         <div className="pt-2">
           <ProductCharacteristics product={product} />

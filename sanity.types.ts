@@ -183,6 +183,12 @@ export type Product = {
   productType?: "saree" | "suit" | "coordset" | "lehenga" | "kurti" | "dupatta";
   sizes?: Array<string>;
   colors?: Array<string>;
+  variants?: Array<{
+    size?: string;
+    color?: string;
+    stock?: number;
+    _key: string;
+  }>;
   material?:
     | "silk"
     | "cotton"
@@ -422,6 +428,12 @@ export type DEAL_PRODUCTS_RESULT = Array<{
   productType?: "coordset" | "dupatta" | "kurti" | "lehenga" | "saree" | "suit";
   sizes?: Array<string>;
   colors?: Array<string>;
+  variants?: Array<{
+    size?: string;
+    color?: string;
+    stock?: number;
+    _key: string;
+  }>;
   material?:
     | "blended"
     | "chanderi"
@@ -470,6 +482,12 @@ export type PRODUCT_BY_SLUG_RESULT = {
   productType?: "coordset" | "dupatta" | "kurti" | "lehenga" | "saree" | "suit";
   sizes?: Array<string>;
   colors?: Array<string>;
+  variants?: Array<{
+    size?: string;
+    color?: string;
+    stock?: number;
+    _key: string;
+  }>;
   material?:
     | "blended"
     | "chanderi"

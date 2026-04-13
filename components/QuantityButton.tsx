@@ -12,12 +12,21 @@ interface Props {
 }
 
 const QuantityButton = ({ product, className }: Props) => {
-    const { addItem, removeItem, getItemCount } = useStore();
-    const itemCount = getItemCount(product?._id)
-    const isOutOfStock = product?.stock === 0;
+    const { addItem, removeItem, getItemCount, getProductCount } = useStore();
+    
+    const p = product as any;
+    const hasVariants = p?.variants?.length > 0;
+    const selectedVariant = p?.variants?.find(
+        (v: any) => (v.size || null) === (p.selectedSize || null) && (v.color || null) === (p.selectedColor || null)
+    );
+    const availableStock = hasVariants ? (selectedVariant?.stock || 0) : (p?.stock || 0);
+
+    const itemCount = getItemCount(product?._id, p?.selectedSize, p?.selectedColor);
+    const cartQuantity = hasVariants ? itemCount : getProductCount(product?._id);
+    const isOutOfStock = availableStock === 0 || availableStock <= cartQuantity;
 
     const handleRemoveProduct = () => {
-        removeItem(product?._id);
+        removeItem(product?._id, (product as any)?.selectedSize, (product as any)?.selectedColor);
         if (itemCount > 1) {
             toast.dismiss();
             toast.success("Quantity Decreased Successfully")
@@ -28,7 +37,7 @@ const QuantityButton = ({ product, className }: Props) => {
     }
 
     const handleAddToCart = () => {
-        if ((product?.stock as number) > itemCount) {
+        if (availableStock > cartQuantity) {
             addItem(product)
             toast.dismiss();
             toast.success("Quantity Increased Successfully")

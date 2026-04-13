@@ -10,12 +10,13 @@ export interface CartItem {
 interface StoreState {
   items: CartItem[];
   addItem: (product: Product) => void;
-  removeItem: (productId: string) => void;
-  deleteCartProduct: (productId: string) => void;
+  removeItem: (productId: string, size?: string, color?: string) => void;
+  deleteCartProduct: (productId: string, size?: string, color?: string) => void;
   resetCart: () => void;
   getTotalPrice: () => number;
   getSubTotalPrice: () => number;
-  getItemCount: (productId: string) => number;
+  getItemCount: (productId: string, size?: string, color?: string) => number;
+  getProductCount: (productId: string) => number;
   getGroupedItems: () => CartItem[];
   //   // favorite
   favoriteProduct: Product[];
@@ -24,6 +25,9 @@ interface StoreState {
   resetFavorite: () => void;
 }
 
+const getVariantKey = (id: string, size?: string, color?: string) => 
+  `${id}-${size || 'nosize'}-${color || 'nocolor'}`;
+
 const useStore = create<StoreState>()(
   persist(
     (set, get) => ({
@@ -31,13 +35,17 @@ const useStore = create<StoreState>()(
       favoriteProduct: [],
       addItem: (product) =>
         set((state) => {
+          const size = (product as any).selectedSize;
+          const color = (product as any).selectedColor;
+          const variantKey = getVariantKey(product._id, size, color);
+
           const existingItem = state.items.find(
-            (item) => item.product._id === product._id,
+            (item) => getVariantKey(item.product._id, (item.product as any).selectedSize, (item.product as any).selectedColor) === variantKey,
           );
           if (existingItem) {
             return {
               items: state.items.map((item) =>
-                item.product._id === product._id
+                getVariantKey(item.product._id, (item.product as any).selectedSize, (item.product as any).selectedColor) === variantKey
                   ? { ...item, quantity: item.quantity + 1 }
                   : item,
               ),
@@ -46,25 +54,31 @@ const useStore = create<StoreState>()(
             return { items: [...state.items, { product, quantity: 1 }] };
           }
         }),
-      removeItem: (productId) =>
-        set((state) => ({
-          items: state.items.reduce((acc, item) => {
-            if (item.product._id === productId) {
-              if (item.quantity > 1) {
-                acc.push({ ...item, quantity: item.quantity - 1 });
+      removeItem: (productId, size, color) =>
+        set((state) => {
+          const variantKey = getVariantKey(productId, size, color);
+          return {
+            items: state.items.reduce((acc, item) => {
+              if (getVariantKey(item.product._id, (item.product as any).selectedSize, (item.product as any).selectedColor) === variantKey) {
+                if (item.quantity > 1) {
+                  acc.push({ ...item, quantity: item.quantity - 1 });
+                }
+              } else {
+                acc.push(item);
               }
-            } else {
-              acc.push(item);
-            }
-            return acc;
-          }, [] as CartItem[]),
-        })),
-      deleteCartProduct: (productId) =>
-        set((state) => ({
-          items: state.items.filter(
-            ({ product }) => product?._id !== productId,
-          ),
-        })),
+              return acc;
+            }, [] as CartItem[]),
+          };
+        }),
+      deleteCartProduct: (productId, size, color) =>
+        set((state) => {
+          const variantKey = getVariantKey(productId, size, color);
+          return {
+            items: state.items.filter(
+              ({ product }) => getVariantKey(product?._id, (product as any).selectedSize, (product as any).selectedColor) !== variantKey,
+            ),
+          };
+        }),
       resetCart: () => set({ items: [] }),
       getTotalPrice: () => {
         return get().items.reduce(
@@ -80,9 +94,18 @@ const useStore = create<StoreState>()(
           return total + discountedPrice * item.quantity;
         }, 0);
       },
-      getItemCount: (productId) => {
-        const item = get().items.find((item) => item.product._id === productId);
+      getItemCount: (productId, size, color) => {
+        const variantKey = getVariantKey(productId, size, color);
+        const item = get().items.find((item) => getVariantKey(item.product._id, (item.product as any).selectedSize, (item.product as any).selectedColor) === variantKey);
         return item ? item.quantity : 0;
+      },
+      getProductCount: (productId) => {
+        return get().items.reduce((total, item) => {
+          if (item.product._id === productId) {
+            return total + item.quantity;
+          }
+          return total;
+        }, 0);
       },
       getGroupedItems: () => get().items,
       addToFavorite: (product: Product) => {

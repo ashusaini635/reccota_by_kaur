@@ -644,36 +644,6 @@
   },
   {
     "type": "type",
-    "name": "sanity.imageAsset.reference",
-    "value": {
-      "type": "object",
-      "attributes": {
-        "_ref": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "string"
-          }
-        },
-        "_type": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "string",
-            "value": "reference"
-          }
-        },
-        "_weak": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "boolean"
-          },
-          "optional": true
-        }
-      },
-      "dereferencesTo": "sanity.imageAsset"
-    }
-  },
-  {
-    "type": "type",
     "name": "category.reference",
     "value": {
       "type": "object",
@@ -733,6 +703,36 @@
     }
   },
   {
+    "type": "type",
+    "name": "sanity.imageAsset.reference",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_ref": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          }
+        },
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "reference"
+          }
+        },
+        "_weak": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "boolean"
+          },
+          "optional": true
+        }
+      },
+      "dereferencesTo": "sanity.imageAsset"
+    }
+  },
+  {
     "name": "product",
     "type": "document",
     "attributes": {
@@ -782,71 +782,24 @@
         },
         "optional": true
       },
-      "images": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "array",
-          "of": {
-            "type": "object",
-            "attributes": {
-              "asset": {
-                "type": "objectAttribute",
-                "value": {
-                  "type": "inline",
-                  "name": "sanity.imageAsset.reference"
-                },
-                "optional": true
-              },
-              "media": {
-                "type": "objectAttribute",
-                "value": {
-                  "type": "unknown"
-                },
-                "optional": true
-              },
-              "hotspot": {
-                "type": "objectAttribute",
-                "value": {
-                  "type": "inline",
-                  "name": "sanity.imageHotspot"
-                },
-                "optional": true
-              },
-              "crop": {
-                "type": "objectAttribute",
-                "value": {
-                  "type": "inline",
-                  "name": "sanity.imageCrop"
-                },
-                "optional": true
-              },
-              "_type": {
-                "type": "objectAttribute",
-                "value": {
-                  "type": "string",
-                  "value": "image"
-                }
-              }
-            },
-            "rest": {
-              "type": "object",
-              "attributes": {
-                "_key": {
-                  "type": "objectAttribute",
-                  "value": {
-                    "type": "string"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "optional": true
-      },
       "description": {
         "type": "objectAttribute",
         "value": {
           "type": "string"
+        },
+        "optional": true
+      },
+      "basePrice": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "number"
+        },
+        "optional": true
+      },
+      "discount": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "number"
         },
         "optional": true
       },
@@ -880,31 +833,57 @@
         },
         "optional": true
       },
-      "price": {
+      "status": {
         "type": "objectAttribute",
         "value": {
-          "type": "number"
+          "type": "union",
+          "of": [
+            {
+              "type": "string",
+              "value": "new"
+            },
+            {
+              "type": "string",
+              "value": "hot"
+            },
+            {
+              "type": "string",
+              "value": "sale"
+            }
+          ]
         },
         "optional": true
       },
-      "discount": {
+      "productType": {
         "type": "objectAttribute",
         "value": {
-          "type": "number"
-        },
-        "optional": true
-      },
-      "sku": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "string"
-        },
-        "optional": true
-      },
-      "stock": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "number"
+          "type": "union",
+          "of": [
+            {
+              "type": "string",
+              "value": "saree"
+            },
+            {
+              "type": "string",
+              "value": "suit"
+            },
+            {
+              "type": "string",
+              "value": "coordset"
+            },
+            {
+              "type": "string",
+              "value": "lehenga"
+            },
+            {
+              "type": "string",
+              "value": "kurti"
+            },
+            {
+              "type": "string",
+              "value": "dupatta"
+            }
+          ]
         },
         "optional": true
       },
@@ -915,17 +894,21 @@
           "of": {
             "type": "object",
             "attributes": {
-              "sku": {
+              "variantId": {
                 "type": "objectAttribute",
                 "value": {
-                  "type": "string"
+                  "type": "inline",
+                  "name": "slug"
                 },
                 "optional": true
               },
               "size": {
                 "type": "objectAttribute",
                 "value": {
-                  "type": "string"
+                  "type": "array",
+                  "of": {
+                    "type": "string"
+                  }
                 },
                 "optional": true
               },
@@ -933,6 +916,13 @@
                 "type": "objectAttribute",
                 "value": {
                   "type": "string"
+                },
+                "optional": true
+              },
+              "price": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "number"
                 },
                 "optional": true
               },
@@ -1020,39 +1010,6 @@
         },
         "optional": true
       },
-      "productType": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "union",
-          "of": [
-            {
-              "type": "string",
-              "value": "saree"
-            },
-            {
-              "type": "string",
-              "value": "suit"
-            },
-            {
-              "type": "string",
-              "value": "coordset"
-            },
-            {
-              "type": "string",
-              "value": "lehenga"
-            },
-            {
-              "type": "string",
-              "value": "kurti"
-            },
-            {
-              "type": "string",
-              "value": "dupatta"
-            }
-          ]
-        },
-        "optional": true
-      },
       "material": {
         "type": "objectAttribute",
         "value": {
@@ -1105,26 +1062,6 @@
         },
         "optional": true
       },
-      "sizes": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "array",
-          "of": {
-            "type": "string"
-          }
-        },
-        "optional": true
-      },
-      "colors": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "array",
-          "of": {
-            "type": "string"
-          }
-        },
-        "optional": true
-      },
       "occasion": {
         "type": "objectAttribute",
         "value": {
@@ -1132,27 +1069,6 @@
           "of": {
             "type": "string"
           }
-        },
-        "optional": true
-      },
-      "status": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "union",
-          "of": [
-            {
-              "type": "string",
-              "value": "new"
-            },
-            {
-              "type": "string",
-              "value": "hot"
-            },
-            {
-              "type": "string",
-              "value": "sale"
-            }
-          ]
         },
         "optional": true
       },
@@ -1247,6 +1163,36 @@
           "type": "objectAttribute",
           "value": {
             "type": "number"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
+    "name": "slug",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "slug"
+          }
+        },
+        "current": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        },
+        "source": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
           },
           "optional": true
         }
@@ -1431,36 +1377,6 @@
           "type": "boolean"
         },
         "optional": true
-      }
-    }
-  },
-  {
-    "name": "slug",
-    "type": "type",
-    "value": {
-      "type": "object",
-      "attributes": {
-        "_type": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "string",
-            "value": "slug"
-          }
-        },
-        "current": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "string"
-          },
-          "optional": true
-        },
-        "source": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "string"
-          },
-          "optional": true
-        }
       }
     }
   },

@@ -132,13 +132,6 @@ export type Order = {
   orderDate?: string;
 };
 
-export type SanityImageAssetReference = {
-  _ref: string;
-  _type: "reference";
-  _weak?: boolean;
-  [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-};
-
 export type CategoryReference = {
   _ref: string;
   _type: "reference";
@@ -153,6 +146,13 @@ export type BrandReference = {
   [internalGroqTypeReferenceTo]?: "brand";
 };
 
+export type SanityImageAssetReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+};
+
 export type Product = {
   _id: string;
   _type: "product";
@@ -161,29 +161,22 @@ export type Product = {
   _rev: string;
   name?: string;
   slug?: Slug;
-  images?: Array<{
-    asset?: SanityImageAssetReference;
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    _type: "image";
-    _key: string;
-  }>;
   description?: string;
+  basePrice?: number;
+  discount?: number;
   categories?: Array<
     {
       _key: string;
     } & CategoryReference
   >;
   brand?: BrandReference;
-  price?: number;
-  discount?: number;
-  sku?: string;
-  stock?: number;
+  status?: "new" | "hot" | "sale";
+  productType?: "saree" | "suit" | "coordset" | "lehenga" | "kurti" | "dupatta";
   variants?: Array<{
-    sku?: string;
-    size?: string;
+    variantId?: Slug;
+    size?: Array<string>;
     color?: string;
+    price?: number;
     stock?: number;
     images?: Array<{
       asset?: SanityImageAssetReference;
@@ -195,7 +188,6 @@ export type Product = {
     }>;
     _key: string;
   }>;
-  productType?: "saree" | "suit" | "coordset" | "lehenga" | "kurti" | "dupatta";
   material?:
     | "silk"
     | "cotton"
@@ -207,10 +199,7 @@ export type Product = {
     | "jacquard"
     | "blended";
   careInstructions?: string;
-  sizes?: Array<string>;
-  colors?: Array<string>;
   occasion?: Array<string>;
-  status?: "new" | "hot" | "sale";
   isFeatured?: boolean;
 };
 
@@ -228,6 +217,12 @@ export type SanityImageHotspot = {
   y?: number;
   height?: number;
   width?: number;
+};
+
+export type Slug = {
+  _type: "slug";
+  current?: string;
+  source?: string;
 };
 
 export type Brand = {
@@ -257,12 +252,6 @@ export type Brand = {
   yearFounded?: number;
   foundedBy?: string;
   isFeatured?: boolean;
-};
-
-export type Slug = {
-  _type: "slug";
-  current?: string;
-  source?: string;
 };
 
 export type Category = {
@@ -391,14 +380,14 @@ export type AllSanitySchemaTypes =
   | Address
   | ProductReference
   | Order
-  | SanityImageAssetReference
   | CategoryReference
   | BrandReference
+  | SanityImageAssetReference
   | Product
   | SanityImageCrop
   | SanityImageHotspot
-  | Brand
   | Slug
+  | Brand
   | Category
   | SanityImagePaletteSwatch
   | SanityImagePalette
@@ -420,25 +409,18 @@ export type DEAL_PRODUCTS_RESULT = Array<{
   _rev: string;
   name?: string;
   slug?: Slug;
-  images?: Array<{
-    asset?: SanityImageAssetReference;
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    _type: "image";
-    _key: string;
-  }>;
   description?: string;
+  basePrice?: number;
+  discount?: number;
   categories: Array<string | null> | null;
   brand?: BrandReference;
-  price?: number;
-  discount?: number;
-  sku?: string;
-  stock?: number;
+  status: "hot";
+  productType?: "coordset" | "dupatta" | "kurti" | "lehenga" | "saree" | "suit";
   variants?: Array<{
-    sku?: string;
-    size?: string;
+    variantId?: Slug;
+    size?: Array<string>;
     color?: string;
+    price?: number;
     stock?: number;
     images?: Array<{
       asset?: SanityImageAssetReference;
@@ -450,7 +432,6 @@ export type DEAL_PRODUCTS_RESULT = Array<{
     }>;
     _key: string;
   }>;
-  productType?: "coordset" | "dupatta" | "kurti" | "lehenga" | "saree" | "suit";
   material?:
     | "blended"
     | "chanderi"
@@ -462,10 +443,7 @@ export type DEAL_PRODUCTS_RESULT = Array<{
     | "silk"
     | "velvet";
   careInstructions?: string;
-  sizes?: Array<string>;
-  colors?: Array<string>;
   occasion?: Array<string>;
-  status: "hot";
   isFeatured?: boolean;
 }>;
 
@@ -480,29 +458,22 @@ export type PRODUCT_BY_SLUG_RESULT = {
   _rev: string;
   name?: string;
   slug?: Slug;
-  images?: Array<{
-    asset?: SanityImageAssetReference;
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    _type: "image";
-    _key: string;
-  }>;
   description?: string;
+  basePrice?: number;
+  discount?: number;
   categories?: Array<
     {
       _key: string;
     } & CategoryReference
   >;
   brand?: BrandReference;
-  price?: number;
-  discount?: number;
-  sku?: string;
-  stock?: number;
+  status?: "hot" | "new" | "sale";
+  productType?: "coordset" | "dupatta" | "kurti" | "lehenga" | "saree" | "suit";
   variants?: Array<{
-    sku?: string;
-    size?: string;
+    variantId?: Slug;
+    size?: Array<string>;
     color?: string;
+    price?: number;
     stock?: number;
     images?: Array<{
       asset?: SanityImageAssetReference;
@@ -514,7 +485,6 @@ export type PRODUCT_BY_SLUG_RESULT = {
     }>;
     _key: string;
   }>;
-  productType?: "coordset" | "dupatta" | "kurti" | "lehenga" | "saree" | "suit";
   material?:
     | "blended"
     | "chanderi"
@@ -526,10 +496,7 @@ export type PRODUCT_BY_SLUG_RESULT = {
     | "silk"
     | "velvet";
   careInstructions?: string;
-  sizes?: Array<string>;
-  colors?: Array<string>;
   occasion?: Array<string>;
-  status?: "hot" | "new" | "sale";
   isFeatured?: boolean;
 } | null;
 

@@ -7,7 +7,8 @@ import {
 import { urlFor } from "@/sanity/lib/image";
 import { AnimatePresence, motion } from "motion/react";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect } from "react";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 interface Props {
   images?: Array<{
     asset?: {
@@ -20,52 +21,85 @@ interface Props {
     crop?: SanityImageCrop;
     _type: "image";
     _key: string;
+    variantColor?: string;
   }>;
   isStock: number | undefined;
 }
 
 const ImageView = ({ images = [], isStock }: Props) => {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+  const colorFromUrl = searchParams.get("color");
+
   const [active, setActive] = React.useState(images[0]);
   const [activeTab, setActiveTab] = React.useState<
     "description" | "additional" | "review"
   >("description");
 
+  useEffect(() => {
+    if (colorFromUrl === "none") {
+      const mainImage = images.find((img) => !img.variantColor);
+      if (mainImage) {
+        setActive(mainImage);
+      }
+    } else if (colorFromUrl) {
+      const imageForColor = images.find((img) => img.variantColor === colorFromUrl);
+      if (imageForColor) {
+        setActive(imageForColor);
+      }
+    }
+  }, [colorFromUrl, images]);
+
+  const handleImageClick = (image: any) => {
+    setActive(image);
+    const params = new URLSearchParams(searchParams.toString());
+    if (image.variantColor) {
+      params.set("color", image.variantColor);
+    } else {
+      params.set("color", "none");
+    }
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  };
+
   return (
     <div className="w-full md:w-1/2 space-y-2 md:space-y-4">
       <AnimatePresence mode="wait">
-        <motion.div
-          key={active?._key}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.5 }}
-          className="w-full max-h-137.5 min-h-112.5 border border-darkColor/10 rounded-md group overflow-hidden"
-        >
-          <Image
-            src={urlFor(active).url()}
-            alt="prodcutImage"
-            width={700}
-            height={700}
-            priority
-            className={`w-full h-96 max-h-137.5 min-h-125 object-contain group-hover:scale-110 hoverEffect rounded-md ${isStock === 0 ? "opacity-50" : ""}`}
-          />
-        </motion.div>
+        {active && (
+          <motion.div
+            key={active?._key || "main-image"}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
+            className="w-full max-h-137.5 min-h-112.5 border border-darkColor/10 rounded-md group overflow-hidden flex items-center justify-center bg-gray-50"
+          >
+            <Image
+              src={urlFor(active).url()}
+              alt="prodcutImage"
+              width={700}
+              height={700}
+              priority
+              className={`w-full h-96 max-h-137.5 min-h-125 object-contain group-hover:scale-110 hoverEffect rounded-md ${isStock === 0 ? "opacity-50" : ""}`}
+            />
+          </motion.div>
+        )}
       </AnimatePresence>
-      <div className="grid grid-cols-6 gap-2 h-20 md:h-24">
-        {images?.map((image) => (
+      <div className="flex flex-wrap gap-2">
+        {images?.map((image, index) => (
           <button
-            key={image?._key}
-            onClick={() => setActive(image)}
-            className={`border rounded-md 
-                overflow-hidden 
-                ${active?._key === image?._key ? "border-accent-pink opacity-100" : "opacity-80"}`}
+            key={image?._key || String(index)}
+        onClick={() => handleImageClick(image)}
+            className={`w-16 h-16 md:w-20 md:h-20 border rounded-md 
+                overflow-hidden shrink-0 transition-all duration-300
+                ${active === image ? "border-accent-pink opacity-100 ring-1 ring-accent-pink shadow-sm" : "opacity-70 hover:opacity-100"}`}
           >
             <Image
               src={urlFor(image).url()}
-              alt={`Thumbnail ${image._key}`}
+              alt={`Thumbnail ${index + 1}`}
               width={100}
               height={100}
-              className="w-full h-auto object-contain"
+              className="w-full h-full object-cover"
             />
           </button>
         ))}

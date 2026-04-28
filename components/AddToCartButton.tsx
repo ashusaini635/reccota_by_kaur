@@ -8,6 +8,7 @@ import useStore from "@/collection";
 import toast from "react-hot-toast";
 import PriceFormatter from "./PriceFormatter";
 import QuantityButton from "./QuantityButton";
+import Link from "next/link";
 
 interface Props {
   product: Product;
@@ -19,17 +20,24 @@ const AddToCartButton = ({ product, className }: Props) => {
   
   const p = product as any;
   const hasVariants = p?.variants?.length > 0;
+  const isVariantSelected = Boolean(p.selectedSize || p.selectedColor);
   const selectedVariant = p?.variants?.find(
-    (v: any) => (v.size || null) === (p.selectedSize || null) && (v.color || null) === (p.selectedColor || null)
+    (v: any) => 
+      (Array.isArray(v.size) ? v.size.includes(p.selectedSize) : (v.size || null) === (p.selectedSize || null)) && 
+      (v.color || null) === (p.selectedColor || null)
   );
-  const availableStock = hasVariants ? (selectedVariant?.stock || 0) : (p?.stock || 0);
+  
+  // Enforce stock based on the specific variant or base product.
+  const availableStock = isVariantSelected ? (selectedVariant?.stock ?? 0) : (p?.stock ?? 0);
 
   const itemCount = getItemCount(product?._id, p?.selectedSize, p?.selectedColor);
-  const cartQuantity = hasVariants ? itemCount : getProductCount(product?._id);
-  const isOutOfStock = availableStock === 0 || availableStock <= cartQuantity;
+  
+  const isOutOfStock = availableStock <= 0 || availableStock <= itemCount;
 
   const handleAddToCart = () => {
-    if (availableStock > cartQuantity) {
+    const canAdd = availableStock > itemCount;
+
+    if (canAdd) {
       addItem(product)
       toast.dismiss();
       toast.success(`${product?.name?.substring(0, 12)}... added Successfully`)
@@ -49,7 +57,7 @@ const AddToCartButton = ({ product, className }: Props) => {
         <div className="flex items-center justify-between border-t pt-1">
           <span className="text-xs font-semibold">Subtotal</span>
           <PriceFormatter
-            amount={product?.price ? product?.price * itemCount : 0}
+            amount={(p?.price || p?.basePrice || 0) * itemCount}
             className="text-sm font-bold text-dark-pink"
           />
         </div>

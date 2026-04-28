@@ -6,6 +6,7 @@ import ProductCharacteristics from "@/components/ProductCharacteristics";
 import { getProductBySlug } from "@/sanity/queries";
 import { CornerDownLeft, StarIcon, Truck } from "lucide-react";
 import React from "react";
+import { Suspense } from "react";
 import { FaRegQuestionCircle } from "react-icons/fa";
 import { FiShare2 } from "react-icons/fi";
 import { RxBorderSplit } from "react-icons/rx";
@@ -18,7 +19,14 @@ const SingleProductPage = async ({
 }) => {
   const { slug } = await params;
   const product = await getProductBySlug(slug);
-  const normalizedImages = product?.images?.map((img) => ({
+  
+  // Combine the main product images with all variant images
+  const allImages = [
+    ...(product?.images?.map((img: any) => ({ ...img, isMain: true })) || []),
+    ...(product?.variants?.flatMap((variant: any) => variant?.images?.map((img: any) => ({ ...img, variantColor: variant.color })) || []) || [])
+  ];
+
+  const normalizedImages = allImages?.map((img: any) => ({
     ...img,
     asset: img.asset
       ? { ...img.asset, _weak: img.asset._weak ?? false }
@@ -28,7 +36,9 @@ const SingleProductPage = async ({
   return (
     <Container className="flex flex-col md:flex-row gap-10 lg:gap-14 py-12 md:py-16">
       {normalizedImages && (
-        <ImageView images={normalizedImages} isStock={product?.stock} />
+        <Suspense fallback={<div className="w-full md:w-1/2 h-125 bg-gray-100 animate-pulse rounded-md" />}>
+          <ImageView images={normalizedImages} isStock={product?.stock} />
+        </Suspense>
       )}
       <div className="w-full md:w-1/2 flex flex-col gap-6 md:gap-8">
         <div className="space-y-4">
@@ -57,17 +67,12 @@ const SingleProductPage = async ({
           </p>
         </div>
 
-        {/* Price */}
-        <div className="border-y border-accent-pink/10 py-5">
-          <PriceView
-            price={product?.price}
-            discount={product?.discount}
-            className="text-sm md:text-lg font-bold"
-          />
-        </div>
-
         {/* Interactive Add To Cart Area (Size, Color, Actions) */}
-        {product && <AddToCartArea product={product} />}
+        {product && (
+          <Suspense fallback={<div className="h-50 bg-gray-100 animate-pulse rounded-md" />}>
+            <AddToCartArea product={product} />
+          </Suspense>
+        )}
 
         <div className="pt-2">
           <ProductCharacteristics product={product} />

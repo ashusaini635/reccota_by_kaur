@@ -15,13 +15,20 @@ const ProductCharacteristics = async ({
 }) => {
   const brand = await getBrand(product?.slug?.current as string);
 
+  const hasVariants = product?.variants && product.variants.length > 0;
+  const totalVariantStock = product?.variants?.reduce((total: number, variant: any) => total + (variant?.stock || 0), 0) || 0;
+  const isOutOfStock = (product?.stock ?? 0) <= 0 && totalVariantStock <= 0;
+
+  const availableSizes = Array.from(new Set(product?.variants?.flatMap((v: any) => v.size).filter(Boolean))) as string[];
+  const availableColors = Array.from(new Set(product?.variants?.map((v: any) => v.color).filter(Boolean))) as string[];
+
   const characteristics = [
     { label: "Brand", value: brand?.[0]?.brandName },
     { label: "Collection", value: "2025" },
-    { label: "Sizes", value: product?.sizes?.join(", "), capitalize: true },
-    { label: "Colors", value: product?.colors?.join(", "), capitalize: true },
+    { label: "Sizes", value: availableSizes.join(", "), capitalize: true },
+    { label: "Colors", value: availableColors.join(", "), capitalize: true },
     { label: "Material", value: product?.material, capitalize: true },
-    { label: "Stock", value: product?.stock ? "Available" : "Out of Stock" },
+    { label: "Stock", value: !isOutOfStock ? "Available" : "Out of Stock" },
     { label: "Care Instructions", value: product?.careInstructions },
   ].filter((char) => char.value);
 

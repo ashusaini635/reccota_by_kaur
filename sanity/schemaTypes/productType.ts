@@ -24,20 +24,15 @@ export const productType = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: "images",
-      title: "Product Images",
-      type: "array",
-      of: [{ type: "image", options: { hotspot: true } }],
-    }),
-    defineField({
       name: "description",
       title: "Description",
       type: "string",
     }),
     defineField({
-      name: "price",
-      title: "Price",
+      name: "basePrice",
+      title: "Base Price",
       type: "number",
+      description: "Starting or base price for this product",
       validation: (Rule) => Rule.required().min(0),
     }),
     defineField({
@@ -51,13 +46,6 @@ export const productType = defineType({
       title: "Categories",
       type: "array",
       of: [{ type: "reference", to: { type: "category" } }],
-    }),
-    defineField({
-      name: "stock",
-      title: "Stock",
-      type: "number",
-      description: "Overall total stock (For variant-level stock, use the Variants field below)",
-      validation: (Rule) => Rule.min(0),
     }),
     defineField({
       name: "brand",
@@ -95,32 +83,8 @@ export const productType = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: "sizes",
-      title: "Available Sizes",
-      type: "array",
-      of: [{ type: "string" }],
-      options: {
-        list: [
-          { title: "XS", value: "xs" },
-          { title: "S", value: "s" },
-          { title: "M", value: "m" },
-          { title: "L", value: "l" },
-          { title: "XL", value: "xl" },
-          { title: "XXL", value: "xxl" },
-          { title: "Free Size", value: "freesize" },
-        ],
-      },
-    }),
-    defineField({
-      name: "colors",
-      title: "Available Colors",
-      type: "array",
-      of: [{ type: "string" }],
-      description: "List all available colors for this product",
-    }),
-    defineField({
       name: "variants",
-      title: "Product Variants (Inventory Tracking)",
+      title: "Product Variants",
       type: "array",
       description: "Add specific size and color combinations and track their stock individually.",
       of: [
@@ -128,9 +92,38 @@ export const productType = defineType({
           type: "object",
           fields: [
             defineField({
+              name: "variantId",
+              title: "Variant ID / SKU",
+              type: "slug",
+              description: "Click 'Generate' to auto-create a unique identifier for this variant.",
+              options: {
+                source: (doc, options: any) => {
+                  const productName = doc?.name || "product";
+                  const color = options?.parent?.color || "";
+                  const size = Array.isArray(options?.parent?.size) ? options.parent.size.join("-") : (options?.parent?.size || "");
+                  // Combine the product name, color, and size with hyphens
+                  return [productName, color, size].filter(Boolean).join("-");
+                },
+                maxLength: 200,
+              },
+              validation: (Rule) => Rule.required(),
+            }),
+            defineField({
               name: "size",
               title: "Size",
-              type: "string",
+              type: "array",
+              of: [{ type: "string" }],
+              options: {
+                list: [
+                  { title: "XS", value: "xs" },
+                  { title: "S", value: "s" },
+                  { title: "M", value: "m" },
+                  { title: "L", value: "l" },
+                  { title: "XL", value: "xl" },
+                  { title: "XXL", value: "xxl" },
+                  { title: "Free Size", value: "freesize" },
+                ],
+              },
             }),
             defineField({
               name: "color",
@@ -138,18 +131,34 @@ export const productType = defineType({
               type: "string",
             }),
             defineField({
+              name: "price",
+              title: "Variant Price",
+              type: "number",
+              description: "Specific price for this variant (overrides base price)",
+            }),
+            defineField({
               name: "stock",
               title: "Variant Stock",
               type: "number",
               validation: (Rule) => Rule.required().min(0),
             }),
+            defineField({
+              name: "images",
+              title: "Variant Images",
+              type: "array",
+              of: [{ type: "image", options: { hotspot: true } }],
+              description: "Images specific to this variant (e.g., specific color images).",
+            }),
           ],
           preview: {
-            select: { size: "size", color: "color", stock: "stock" },
-            prepare({ size, color, stock }) {
+            select: { size: "size", color: "color", stock: "stock", media: "images" },
+            prepare({ size, color, stock, media }) {
+              const image = media && media[0];
+              const sizeLabel = Array.isArray(size) ? size.join(', ').toUpperCase() : (size || 'Any Size');
               return {
-                title: `${color || 'Any Color'} - ${size || 'Any Size'}`,
+                title: `${color || 'Any Color'} - ${sizeLabel}`,
                 subtitle: `Stock: ${stock ?? 0}`,
+                media: image,
               };
             },
           },
@@ -207,16 +216,15 @@ export const productType = defineType({
   preview: {
     select: {
       title: "name",
-      media: "images",
-      subtitle: "price",
+      media: "variants.0.images.0",
+      subtitle: "basePrice",
     },
     prepare(selection) {
       const { title, subtitle, media } = selection;
-      const image = media && media[0];
       return {
         title: title,
-        subtitle: `$${subtitle}`,
-        media: image,
+        subtitle: subtitle ? `$${subtitle}` : 'No base price',
+        media: media,
       };
     },
   },

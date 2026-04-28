@@ -2,14 +2,21 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { Product } from "./sanity.types";
 
+export interface CartProduct extends Product {
+  selectedSize?: string;
+  selectedColor?: string;
+  basePrice?: number;
+  price?: number;
+}
+
 export interface CartItem {
-  product: Product;
+  product: CartProduct;
   quantity: number;
 }
 
 interface StoreState {
   items: CartItem[];
-  addItem: (product: Product) => void;
+  addItem: (product: CartProduct | Product) => void;
   removeItem: (productId: string, size?: string, color?: string) => void;
   deleteCartProduct: (productId: string, size?: string, color?: string) => void;
   resetCart: () => void;
@@ -35,23 +42,24 @@ const useStore = create<StoreState>()(
       favoriteProduct: [],
       addItem: (product) =>
         set((state) => {
-          const size = (product as any).selectedSize;
-          const color = (product as any).selectedColor;
-          const variantKey = getVariantKey(product._id, size, color);
+          const cartProduct = product as CartProduct;
+          const size = cartProduct.selectedSize;
+          const color = cartProduct.selectedColor;
+          const variantKey = getVariantKey(cartProduct._id, size, color);
 
           const existingItem = state.items.find(
-            (item) => getVariantKey(item.product._id, (item.product as any).selectedSize, (item.product as any).selectedColor) === variantKey,
+            (item) => getVariantKey(item.product._id, item.product.selectedSize, item.product.selectedColor) === variantKey,
           );
           if (existingItem) {
             return {
               items: state.items.map((item) =>
-                getVariantKey(item.product._id, (item.product as any).selectedSize, (item.product as any).selectedColor) === variantKey
+                getVariantKey(item.product._id, item.product.selectedSize, item.product.selectedColor) === variantKey
                   ? { ...item, quantity: item.quantity + 1 }
                   : item,
               ),
             };
           } else {
-            return { items: [...state.items, { product, quantity: 1 }] };
+            return { items: [...state.items, { product: cartProduct, quantity: 1 }] };
           }
         }),
       removeItem: (productId, size, color) =>
@@ -59,7 +67,7 @@ const useStore = create<StoreState>()(
           const variantKey = getVariantKey(productId, size, color);
           return {
             items: state.items.reduce((acc, item) => {
-              if (getVariantKey(item.product._id, (item.product as any).selectedSize, (item.product as any).selectedColor) === variantKey) {
+              if (getVariantKey(item.product._id, item.product.selectedSize, item.product.selectedColor) === variantKey) {
                 if (item.quantity > 1) {
                   acc.push({ ...item, quantity: item.quantity - 1 });
                 }
@@ -75,28 +83,28 @@ const useStore = create<StoreState>()(
           const variantKey = getVariantKey(productId, size, color);
           return {
             items: state.items.filter(
-              ({ product }) => getVariantKey(product?._id, (product as any).selectedSize, (product as any).selectedColor) !== variantKey,
+              ({ product }) => getVariantKey(product?._id, product.selectedSize, product.selectedColor) !== variantKey,
             ),
           };
         }),
       resetCart: () => set({ items: [] }),
-      getTotalPrice: () => {
+      getSubTotalPrice: () => {
         return get().items.reduce(
-          (total, item) => total + (item.product.price ?? 0) * item.quantity,
+          (total, item) => total + (item.product.price ?? item.product.basePrice ?? 0) * item.quantity,
           0,
         );
       },
-      getSubTotalPrice: () => {
+      getTotalPrice: () => {
         return get().items.reduce((total, item) => {
-          const price = item.product.price ?? 0;
+          const price = item.product.price ?? item.product.basePrice ?? 0;
           const discount = ((item.product.discount ?? 0) * price) / 100;
-          const discountedPrice = price + discount;
+          const discountedPrice = price - discount;
           return total + discountedPrice * item.quantity;
         }, 0);
       },
       getItemCount: (productId, size, color) => {
         const variantKey = getVariantKey(productId, size, color);
-        const item = get().items.find((item) => getVariantKey(item.product._id, (item.product as any).selectedSize, (item.product as any).selectedColor) === variantKey);
+        const item = get().items.find((item) => getVariantKey(item.product._id, item.product.selectedSize, item.product.selectedColor) === variantKey);
         return item ? item.quantity : 0;
       },
       getProductCount: (productId) => {

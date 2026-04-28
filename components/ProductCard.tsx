@@ -8,9 +8,16 @@ import AddToWishlistButton from "./AddToWishlistButton";
 import { Title } from "./ui/text";
 import PriceView from "./PriceView";
 import AddToCartButton from "./AddToCartButton";
+import { Button } from "./ui/button";
 
 const ProductCard = ({ product }: { product: Product }) => {
-  const isOutOfStock = product?.stock === 0;
+  const hasVariants = product?.variants && product.variants.length > 0;
+  const prices = [(product as any)?.basePrice, ...(product?.variants?.map((v: any) => v?.price) || [])].filter((p) => typeof p === 'number');
+  const displayPrice = prices.length > 0 ? Math.min(...prices) : 0;
+
+  const totalVariantStock = product?.variants?.reduce((total: number, variant: any) => total + (variant?.stock || 0), 0) || 0;
+  const isOutOfStock = (product?.stock ?? 0) <= 0 && totalVariantStock <= 0;
+  const firstImage = product?.images?.[0] || product?.variants?.[0]?.images?.[0];
   const statusMap = {
     sale: (
       <span className="inline-block border border-dark-pink text-dark-pink uppercase tracking-widest font-bold text-[9px] px-2 py-0.5 rounded-full">
@@ -37,15 +44,15 @@ const ProductCard = ({ product }: { product: Product }) => {
     <div className="group flex flex-col bg-transparent cursor-pointer">
       {/* Image Section - Fashion Arch Style */}
       <div className="relative w-full aspect-4/5 overflow-hidden rounded-t-[3rem] rounded-b-2xl border border-accent-pink/20 bg-soft-pink/20 group-hover:border-accent-pink/40 group-hover:shadow-2xl group-hover:shadow-accent-pink/10 transition-all duration-500">
-        {product?.images && (
+        {firstImage && (
           <Link href={`/product/${product?.slug?.current}`}>
             <Image
-              src={urlFor(product?.images[0]).url()}
+              src={urlFor(firstImage).url()}
               alt={product?.name || "Product Image"}
               loading="lazy"
               width={700}
               height={700}
-              className={`w-full h-full object-cover transition-transform duration-700 ${product?.stock !== 0 ? "group-hover:scale-105" : "opacity-50"}`}
+              className={`w-full h-full object-cover transition-transform duration-700 ${!isOutOfStock ? "group-hover:scale-105" : "opacity-50"}`}
             />
           </Link>
         )}
@@ -99,7 +106,7 @@ const ProductCard = ({ product }: { product: Product }) => {
         <div className="flex flex-col w-full mt-auto gap-0.5">
           <div className="flex flex-col items-start w-full gap-1">
             <PriceView
-              price={product?.price}
+              price={displayPrice}
               discount={product?.discount}
               className="text-sm font-sans flex-wrap"
             />
@@ -110,10 +117,13 @@ const ProductCard = ({ product }: { product: Product }) => {
               {isOutOfStock ? "Out of Stock" : "In Stock"}
             </p>
           </div>
-          <AddToCartButton
-            product={product}
-            className="w-full rounded-full bg-transparent text-darkColor border border-darkColor/30 hover:bg-dark-pink hover:border-dark-pink hover:text-white transition-all duration-300 py-2.5 text-xs font-semibold tracking-widest shadow-none"
-          />
+          <Link href={`/product/${product?.slug?.current}`}>
+            <Button
+              className="w-full rounded-full bg-transparent text-darkColor border border-darkColor/30 hover:bg-dark-pink hover:border-dark-pink hover:text-white transition-all duration-300 py-2.5 text-xs font-semibold tracking-widest shadow-none"
+            >
+              Buy Now
+            </Button>
+          </Link>
         </div>
       </div>
     </div>

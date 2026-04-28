@@ -16,14 +16,18 @@ const QuantityButton = ({ product, className }: Props) => {
     
     const p = product as any;
     const hasVariants = p?.variants?.length > 0;
+    const isVariantSelected = Boolean(p.selectedSize || p.selectedColor);
     const selectedVariant = p?.variants?.find(
-        (v: any) => (v.size || null) === (p.selectedSize || null) && (v.color || null) === (p.selectedColor || null)
+        (v: any) => 
+            (Array.isArray(v.size) ? v.size.includes(p.selectedSize) : (v.size || null) === (p.selectedSize || null)) && 
+            (v.color || null) === (p.selectedColor || null)
     );
-    const availableStock = hasVariants ? (selectedVariant?.stock || 0) : (p?.stock || 0);
+
+    const availableStock = isVariantSelected ? (selectedVariant?.stock ?? 0) : (p?.stock ?? 0);
 
     const itemCount = getItemCount(product?._id, p?.selectedSize, p?.selectedColor);
-    const cartQuantity = hasVariants ? itemCount : getProductCount(product?._id);
-    const isOutOfStock = availableStock === 0 || availableStock <= cartQuantity;
+    
+    const isOutOfStock = availableStock <= 0 || availableStock <= itemCount;
 
     const handleRemoveProduct = () => {
         removeItem(product?._id, (product as any)?.selectedSize, (product as any)?.selectedColor);
@@ -37,7 +41,7 @@ const QuantityButton = ({ product, className }: Props) => {
     }
 
     const handleAddToCart = () => {
-        if (availableStock > cartQuantity) {
+        if (availableStock > itemCount) {
             addItem(product)
             toast.dismiss();
             toast.success("Quantity Increased Successfully")
@@ -48,7 +52,7 @@ const QuantityButton = ({ product, className }: Props) => {
     }
     return (
         <div className={cn("flex items-center gap-1 pb-1 text-base", className)}>
-            <Button variant="outline" size="icon" disabled={itemCount === 0 || isOutOfStock}
+            <Button variant="outline" size="icon" disabled={itemCount === 0}
                 className='w-6 h-6 border hover:bg-accent-pink/20 hoverEffect' onClick={handleRemoveProduct}>
                 <Minus />
             </Button>

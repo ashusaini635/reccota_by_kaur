@@ -47,11 +47,11 @@ const ProductCharacteristics = async ({
             {characteristics.map((char, index) => (
               <div
                 key={index}
-                className="flex items-center justify-between"
+                className="flex items-start sm:items-center justify-between gap-4"
               >
-                <p className="font-medium text-gray-500">{char.label}</p>
+                <p className="font-medium text-gray-500 shrink-0">{char.label}</p>
                 <p
-                  className={`font-semibold text-darkColor text-right ${char.capitalize ? "capitalize" : ""}`}
+                  className={`font-semibold text-darkColor text-right wrap-break-word ${char.capitalize ? "capitalize" : ""}`}
                 >
                   {char.value}
                 </p>

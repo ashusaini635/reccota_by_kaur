@@ -43,7 +43,7 @@ const Collection = ({ categories, brands }: Props) => {
       *[_type == 'product' 
         && (!defined($selectedCategory) || references(*[_type == "category" && slug.current == $selectedCategory]._id))
         && (!defined($selectedBrand) || references(*[_type == "brand" && slug.current == $selectedBrand]._id))
-        && (basePrice >= $minPrice && basePrice <= $maxPrice || count(variants[price >= $minPrice && price <= $maxPrice]) > 0)
+        && price >= $minPrice && price <= $maxPrice
       ] 
       | order(name asc) {
         ...,"categories": categories[]->title
@@ -106,7 +106,7 @@ const Collection = ({ categories, brands }: Props) => {
             />
           </div>
           <div className="flex-1 pt-5">
-            <div className="h-[calc(100vh-160px)] overflow-y-auto pr-2 scrollbar-hide">
+            <div className="md:h-[calc(100vh-160px)] md:overflow-y-auto pr-2 scrollbar-hide">
               {loading ? (
                 <div className="p-20 flex flex-col gap-2 items-center justify-center bg-white">
                   <Loader2 className="w-10 h-10 text-accent-pink animate-spin" />

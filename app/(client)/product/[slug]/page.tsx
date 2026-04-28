@@ -36,7 +36,7 @@ const SingleProductPage = async ({
   return (
     <Container className="flex flex-col md:flex-row gap-10 lg:gap-14 py-12 md:py-16">
       {normalizedImages && (
-        <Suspense fallback={<div className="w-full md:w-1/2 h-125 bg-gray-100 animate-pulse rounded-md" />}>
+        <Suspense fallback={<div className="w-full md:w-1/2 aspect-[4/5] md:h-[500px] lg:h-[600px] bg-gray-100 animate-pulse rounded-md" />}>
           <ImageView images={normalizedImages} isStock={product?.stock} />
         </Suspense>
       )}

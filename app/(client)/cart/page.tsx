@@ -231,7 +231,7 @@ const CartPage = () => {
                 {/* Order Summary & Address Section */}
                 <div className='lg:col-span-1 space-y-6 sticky top-24 h-fit'>
                   {/* Order Summary */}
-                  <div className='bg-gradient-to-b from-white to-soft-pink/10 p-6 md:p-8 rounded-3xl shadow-lg shadow-accent-pink/5 border border-accent-pink/10'>
+                  <div className='bg-linear-to-b from-white to-soft-pink/10 p-6 md:p-8 rounded-3xl shadow-lg shadow-accent-pink/5 border border-accent-pink/10'>
                     <h2 className='text-xl font-serif italic font-bold text-darkColor mb-6'>Order Summary</h2>
                     <div className='space-y-4'>
                       <div className='flex items-center justify-between text-gray-600'>

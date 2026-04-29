@@ -22,7 +22,6 @@ const SingleProductPage = async ({
   
   // Combine the main product images with all variant images
   const allImages = [
-    ...(product?.images?.map((img: any) => ({ ...img, isMain: true })) || []),
     ...(product?.variants?.flatMap((variant: any) => variant?.images?.map((img: any) => ({ ...img, variantColor: variant.color })) || []) || [])
   ];
 
@@ -33,11 +32,13 @@ const SingleProductPage = async ({
       : img.asset,
   }));
 
+  const totalStock = product?.variants?.reduce((total: number, variant: any) => total + (variant?.stock || 0), 0) || 0;
+
   return (
     <Container className="flex flex-col md:flex-row gap-10 lg:gap-14 py-12 md:py-16">
       {normalizedImages && (
         <Suspense fallback={<div className="w-full md:w-1/2 aspect-4/5 md:h-125 lg:h-150 bg-gray-100 animate-pulse rounded-md" />}>
-          <ImageView images={normalizedImages} isStock={product?.stock} />
+          <ImageView images={normalizedImages} isStock={totalStock} />
         </Suspense>
       )}
       <div className="w-full md:w-1/2 flex flex-col gap-6 md:gap-8">
